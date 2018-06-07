@@ -2,11 +2,6 @@ from django.contrib import admin
 from newblog import models
 
 
-@admin.register(models.CustomUser)
-class CustomUserAdmin(admin.ModelAdmin):
-    pass
-
-
 @admin.register(models.Category)
 class CategoryAdmin(admin.ModelAdmin):
     pass
