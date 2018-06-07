@@ -1,13 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import User
-from django.contrib.auth.validators import ASCIIUsernameValidator
-
-
-class CustomUser(User):
-    username_validator = ASCIIUsernameValidator()
-
-    class Meta:
-        proxy = True  # If no new field is added.
+from django.conf import settings
+from django.utils.translation import gettext as _
 
 
 class Category(models.Model):
@@ -32,8 +25,8 @@ class Category(models.Model):
         null=False
     )
     user = models.ForeignKey(
-        to='CustomUser',
-        null=False,
+        to=settings.AUTH_USER_MODEL,
+        null=True,
         on_delete='DO_NOTHING',
     )
 
@@ -70,22 +63,20 @@ class Article(models.Model):
         auto_now=True,
         null=False
     )
-    # ?????
     publication_date = models.DateField(
-        auto_now_add=True,
+        auto_now_add=False,
         null=False
     )
-    # ?????????
-    visible = models.BooleanField()
+    visible = models.BooleanField(default=False)
     category = models.ForeignKey(
         to='Category',
-        null=False,
-        on_delete='DO_NOTHING',
+        null=True,
+        on_delete='DO_NOTHING'
     )
     user = models.ForeignKey(
-        to='CustomUser',
-        null=False,
-        on_delete='DO_NOTHING',
+        to=settings.AUTH_USER_MODEL,
+        null=True,
+        on_delete='DO_NOTHING'
     )
     tags = models.ManyToManyField(
         to='Tag',
@@ -120,12 +111,12 @@ class Tag(models.Model):
 class ArticleTag(models.Model):
     article = models.ForeignKey(
         to='Article',
-        null=False,
+        null=True,
         on_delete='DO_NOTHING'
     )
     tag = models.ForeignKey(
         to='Tag',
-        null=False,
+        null=True,
         on_delete='DO_NOTHING'
     )
 
@@ -140,11 +131,11 @@ class Comment(models.Model):
     )
     article = models.ForeignKey(
         to='Article',
-        null=False,
-        on_delete='DO_NOTHING',
+        null=True,
+        on_delete='DO_NOTHING'
     )
     user = models.ForeignKey(
-        to='CustomUser',
-        null=False,
-        on_delete='DO_NOTHING',
+        to=settings.AUTH_USER_MODEL,
+        null=True,
+        on_delete='DO_NOTHING'
     )
